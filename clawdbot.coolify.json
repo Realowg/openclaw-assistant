@@ -1,0 +1,31 @@
+{
+  "gateway": {
+    "mode": "local",
+    "bind": "lan",
+    "port": 18789,
+    "trustedProxies": [
+      "10.0.0.0/8",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+      "127.0.0.1"
+    ],
+    "auth": {
+      "mode": "token"
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": false,
+      "dmPolicy": "open",
+      "allowFrom": ["*"]
+    }
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/home/node/clawd"
+    }
+  },
+  "agent": {
+    "model": "openai/gpt-4o"
+  }
+}

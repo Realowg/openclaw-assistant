@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  clawdbot-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.coolify
+    image: clawdbot:coolify
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      # Required secrets (set in Coolify Environment Variables)
+      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_GATEWAY_TOKEN}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      # Optional overrides
+      CLAWDBOT_CONFIG_DIR: ${CLAWDBOT_CONFIG_DIR:-/home/node/.clawdbot}
+      CLAWDBOT_WORKSPACE_DIR: ${CLAWDBOT_WORKSPACE_DIR:-/home/node/clawd}
+      CLAWDBOT_FORCE_CONFIG: ${CLAWDBOT_FORCE_CONFIG:-0}
+    volumes:
+      - clawdbot-config:/home/node/.clawdbot
+      - clawdbot-workspace:/home/node/clawd
+    ports:
+      - "18789:18789"
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:18789/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  clawdbot-config:
+  clawdbot-workspace:
